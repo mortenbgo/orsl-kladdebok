@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Print status
+        run: echo "Push event detected. Building and deploying the project."
+
+# Herfra legger du til din egen logikk og bruker felles workflows der det er mulig. Husk å bruke release-tagger når du refererer felles workflows
+# Det naturlige er å kjøre bygg og tester samt publisering. Det må lages environments i github og ting&tang må legges inn etterhvert som man tar i bruk workflows og actions
