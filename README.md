@@ -2,7 +2,7 @@
 orsl-kladdebok
 
 # Beskrivelse
-En liten beskrivelse av applikasjonen, i dette tilfellet template med noen enkle workflows for å håndtere pull requester og push til main
+Dette er et testrepo for å lage en how-to
 
 # Kom i gang
 Hva man må gjøre for å komme i gang, f.eks. installere dotnet, node osv
