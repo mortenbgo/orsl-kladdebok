@@ -1,5 +1,5 @@
 # Navnet på din applikasjon
-Sier seg selv, i dette tilfellet gittemplate
+orsl-kladdebok
 
 # Beskrivelse
 En liten beskrivelse av applikasjonen, i dette tilfellet template med noen enkle workflows for å håndtere pull requester og push til main
