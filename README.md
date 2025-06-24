@@ -2,7 +2,7 @@
 orsl-kladdebok
 
 # Beskrivelse
-Dette er et testrepo for å lage en how-to. Men ikke så lett å få ting til å skje
+Dette er et testrepo for å lage en how-to. Joda, det var på plass.
 
 # Kom i gang
 Hva man må gjøre for å komme i gang, f.eks. installere dotnet, node osv
