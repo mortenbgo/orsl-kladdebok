@@ -16,8 +16,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2 
 
-      - uses: ./.github/workflows/print_env.yaml
-        with:
-          environment: ${{ matrix.environment }}
+      - name: Build and deploy
+        run: echo "Building and deploying to ${{ matrix.environment }}"
+
+  print_environment:
+    name: "Print Environment for ${{ matrix.environment }}"
+    needs: build_and_deploy
+    strategy:
+      matrix:
+        environment: [DEV, QA, PROD]
+    uses: ./.github/workflows/print_env.yaml
+    with:
+      environment: ${{ matrix.environment }}
 
 
