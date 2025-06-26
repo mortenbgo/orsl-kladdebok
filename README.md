@@ -12,4 +12,4 @@ Herfra legger man inn det som kan være greit å legge til informasjon som er ny
 Man står fritt til å utforme dokumentasjonen som man vil. 
 
 # Littegran mer
-Hva nå
+Hva nå?
