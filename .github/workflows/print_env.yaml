@@ -1,0 +1,17 @@
+name: "Print Environment Variables"
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: "The environment to print"
+        required: true
+        type: string
+jobs:
+  print_env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print environment variables
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "All environment variables:"
+          printenv
