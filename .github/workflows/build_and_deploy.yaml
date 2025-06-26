@@ -20,7 +20,7 @@ jobs:
         run: echo "Building and deploying to ${{ matrix.environment }}"
 
   print_environment:
-    name: "Print Environment for ${{ matrix.environment }}"
+    name: "!!! Print Environment for ${{ matrix.environment }}"
     needs: build_and_deploy
     strategy:
       matrix:
