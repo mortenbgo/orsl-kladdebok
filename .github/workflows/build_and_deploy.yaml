@@ -13,7 +13,7 @@ jobs:
         environment: [DEV, QA, PROD]    
     
     steps:      
-        - uses: print-env
+        - uses: ./.github/workflows/print_env.yaml
           with:
             environment: ${{ matrix.environment }}
             
