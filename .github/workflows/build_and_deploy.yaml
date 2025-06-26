@@ -10,17 +10,11 @@ jobs:
       fail-fast: true # If one job fails, the others will not run
       max-parallel: 1 # Limit the number of parallel jobs
       matrix:
-        environment: [DEV, QA, PROD]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Print status
-        run: echo "Push event detected. Building and deploying the project."
-
-
-      - name: Hent environment variabel for angitt miljø
-        run: echo "Henter miljøvariabler for miljø ${{ matrix.environment }}"
-
-# Herfra legger du til din egen logikk og bruker felles workflows der det er mulig. Husk å bruke release-tagger når du refererer felles workflows
-# Det naturlige er å kjøre bygg og tester samt publisering. Det må lages environments i github og ting&tang må legges inn etterhvert som man tar i bruk workflows og actions
+        environment: [DEV, QA, PROD]    
+    
+    steps:      
+        - uses: print-env
+          with:
+            environment: ${{ matrix.environment }}
+            
+    
