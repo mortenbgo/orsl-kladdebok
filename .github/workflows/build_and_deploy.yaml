@@ -10,7 +10,7 @@ jobs:
       fail-fast: true # If one job fails, the others will not run
       max-parallel: 1 # Limit the number of parallel jobs
       matrix:
-        environment: [QA,DEV,  PROD]
+        environment: [DEV, QA, PROD]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
