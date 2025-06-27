@@ -3,26 +3,22 @@ on:
     branches:
       - main
 jobs:
-  build_and_deploy:
+  fake_build:
     name: "Deploy ${{ matrix.environment }}"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true # If one job fails, the others will not run
-      max-parallel: 1 # Limit the number of parallel jobs
-      matrix:
-        environment: [DEV, QA, PROD]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2 
 
-      - name: Build and deploy
-        run: echo "Building and deploying to ${{ matrix.environment }}"
+      - name: Build
+        run: echo "Bygger lissom applikasonen"
 
-  print_environment:
-    name: "!!! Print Environment for ${{ matrix.environment }}"
-    needs: build_and_deploy
+  fake_deploy:
+    name: "!!! Print Environment for ${{ matrix.environment }}"  
+    needs: fake_build
     strategy:
+      max-parallel: 1
+      fail-fast: true
       matrix:
         environment: [DEV, QA, PROD]
     uses: ./.github/workflows/print_env.yaml

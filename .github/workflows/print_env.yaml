@@ -3,16 +3,14 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: "The environment to print"
+        description: "Environment to deploy to"
         required: true
         type: string
 jobs:
-  print_env:
+  deploy_to_environment:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Print environment variables
         run: |
-          echo "Environment: ${{ inputs.environment }}"
-          echo "All environment variables:"
-          printenv
+          echo "Deployer lissom applikasjonen til ${{ inputs.environment }}"
