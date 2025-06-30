@@ -4,24 +4,24 @@ on:
       - main
 jobs:
   fake_build:
-    name: "Deploy ${{ matrix.environment }}"
+    name: "Bygger applikasjonen"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v4 
 
       - name: Build
-        run: echo "Bygger lissom applikasonen"
+        run: echo "Bygger lissom applikasjonen"
 
   fake_deploy:
-    name: "!!! Print Environment for ${{ matrix.environment }}"  
+    name: "Print miljø for ${{ matrix.environment }}"  
     needs: fake_build
     strategy:
       max-parallel: 1
       fail-fast: true
       matrix:
         environment: [DEV, QA, PROD]
-    uses: ./.github/workflows/print_env.yaml
+    uses: ./.github/workflows/print_env.yaml ## Peker på en gjenbrukbar workflow (reusable workflow)
     with:
       environment: ${{ matrix.environment }}
 
