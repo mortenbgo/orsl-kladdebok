@@ -3,29 +3,25 @@ on:
     branches:
       - main
 jobs:
-  build_and_deploy:
-    name: "Deploy ${{ matrix.environment }}"
+  fake_build:
+    name: "Bygger applikasjonen"
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true # If one job fails, the others will not run
-      max-parallel: 1 # Limit the number of parallel jobs
-      matrix:
-        environment: [DEV, QA, PROD]
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v4 
 
-      - name: Build and deploy
-        run: echo "Building and deploying to ${{ matrix.environment }}"
+      - name: Build
+        run: echo "Bygger lissom applikasjonen"
 
-  print_environment:
-    name: "!!! Print Environment for ${{ matrix.environment }}"
-    needs: build_and_deploy
+  fake_deploy:
+    name: "Print miljø for ${{ matrix.environment }}"  
+    needs: fake_build
     strategy:
+      max-parallel: 1
+      fail-fast: true
       matrix:
         environment: [DEV, QA, PROD]
-    uses: ./.github/workflows/print_env.yaml
+    uses: ./.github/workflows/print_env.yaml ## Peker på en gjenbrukbar workflow (reusable workflow)
     with:
       environment: ${{ matrix.environment }}
 
