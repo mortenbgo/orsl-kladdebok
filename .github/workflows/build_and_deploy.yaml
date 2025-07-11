@@ -3,25 +3,24 @@ on:
     branches:
       - main
 jobs:
-  fake_build:
+  build-api:
     name: "Bygger applikasjonen"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4 
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v1.0.3
+    with:
+      environment: 'Totalt overflødig, må bort'
+      working-directory: 'API'
+      artifact-name: 'api'
+      dotnet-version: '9.x'
 
-      - name: Build
-        run: echo "Bygger lissom applikasjonen"
-
-  fake_deploy:
+  deploy:
     name: "Print miljø for ${{ matrix.environment }}"  
-    needs: fake_build
+    needs: build-api
     strategy:
       max-parallel: 1
       fail-fast: true
       matrix:
-        environment: [DEV, QA, PROD]
-    uses: ./.github/workflows/print_env.yaml ## Peker på en gjenbrukbar workflow (reusable workflow)
+        environment: [DEV, QA, PROD] 
+    uses: ./.github/workflows/deploy-to-env.yaml 
     with:
       environment: ${{ matrix.environment }}
 
