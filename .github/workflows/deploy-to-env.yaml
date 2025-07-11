@@ -46,7 +46,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       app-name: ${{ vars.APP_NAME }}'-api'
-      sql-connection-string: ${{ needs.deploy-db.outputs.sql-connection-string }}
+      sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
     secrets: inherit
     permissions:
       contents: read
