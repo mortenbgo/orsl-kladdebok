@@ -37,7 +37,7 @@ jobs:
     steps:
       - name: Print connection string
         run: |
-          echo "Connection string for ${{ inputs.environment }}: ${{ needs.deploy-db.outputs.sql-connection-string }}"
+          echo "Connection string for ${{ inputs.environment }}: ${{ needs.deploy-db.outputs.sqlconnectionstring }}"
 
   add-managed-id:
     name: "Legg til managed identity for ${{ inputs.environment }}"
@@ -45,7 +45,7 @@ jobs:
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@main
     with:
       environment: ${{ inputs.environment }}
-      app-name: ${{ vars.APP_NAME }}'-api'
+      app-name: ${{ vars.APP_NAME }}-api
       sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
     secrets: inherit
     permissions:
