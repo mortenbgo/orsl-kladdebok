@@ -3,14 +3,15 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: "Environment to deploy to"
+        description: "Environment man vil deploye til"
         required: true
         type: string
-jobs:
-  deploy_to_environment:
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print environment variables
-        run: |
-          echo "Deployer lissom applikasjonen til ${{ inputs.environment }}"
+jobs:  
+  deploy:
+    name: "Deploy til ${{ inputs.environment }}"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@main
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'api'
+      ekstern-tilgang: false
