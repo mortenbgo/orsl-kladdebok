@@ -15,7 +15,7 @@ jobs:
       dotnet-version: '9.x'
 
   deploy:
-    name: "Print miljø for ${{ matrix.environment }}"  
+    name: "Provision og deploy til ${{ matrix.environment }}"  
     needs: build-api
     strategy:
       max-parallel: 1
