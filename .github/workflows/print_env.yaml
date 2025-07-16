@@ -13,4 +13,4 @@ jobs:
     steps:
       - name: Print environment variables
         run: |
-          echo "Deployer lissom applikasjonen til ${{ inputs.environment }}"
+          echo "Mock: Deployer lissom applikasjonen til ${{ inputs.environment }}"
