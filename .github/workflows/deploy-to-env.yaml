@@ -60,6 +60,7 @@ jobs:
       environment: ${{ inputs.environment }}
       commit-hash: ${{ github.sha }}
       artifact-name: 'api'
+      connection-string-name: 'DefaultConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
     secrets: inherit
     permissions:
