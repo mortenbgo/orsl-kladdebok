@@ -9,7 +9,7 @@ on:
 jobs:  
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@main
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@feature/appinsights
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
