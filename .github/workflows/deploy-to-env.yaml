@@ -9,12 +9,13 @@ on:
 jobs:  
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@12ec8d9c91eef8c3caa56cdff266d4d1431e9562
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@feature/appinsights
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
       ekstern-tilgang: false
+      debug: false
     permissions:
       contents: read
       id-token: write
