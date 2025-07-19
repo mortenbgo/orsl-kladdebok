@@ -16,6 +16,7 @@ jobs:
       artifact-name: 'api'
       ekstern-tilgang: false
       debug: false
+      workflow-ref: 'feature/appinsights'
     permissions:
       contents: read
       id-token: write
