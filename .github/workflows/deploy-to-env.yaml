@@ -44,11 +44,12 @@ jobs:
   add-managed-id:
     name: "Legg til managed identity for ${{ inputs.environment }}"
     needs: [deploy-db, provision-app-service, print-connection-string-from-deploy-db]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@main
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@feature/appinsights
     with:
       environment: ${{ inputs.environment }}
       app-name: ${{ vars.APP_NAME }}-api
       sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
+      workflow-ref: 'feature/appinsights'
     secrets: inherit
     permissions:
       contents: read
