@@ -15,18 +15,17 @@ jobs:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
       ekstern-tilgang: false
-      debug: false
-      workflow-ref: 'feature/appinsights'
+      debug: false            
     permissions:
       contents: read
       id-token: write
 
   deploy-db:
     name: "Deploy database til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@main
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@feature/appinsights
     with:
       environment: ${{ inputs.environment }}
-      db-name: ${{vars.APP_NAME}}-api
+      db-name: ${{vars.APP_NAME}}-api      
     secrets: inherit
     permissions:
       contents: read
@@ -49,7 +48,6 @@ jobs:
       environment: ${{ inputs.environment }}
       app-name: ${{ vars.APP_NAME }}-api
       sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-      workflow-ref: 'feature/appinsights'
     secrets: inherit
     permissions:
       contents: read
