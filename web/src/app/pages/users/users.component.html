@@ -1,0 +1,37 @@
+<div class="users-container">
+  <h1>Brukere</h1>
+  
+  <div class="actions">
+    <button (click)="loadUsers()" [disabled]="loading">
+      {{ loading ? 'Laster...' : 'Last inn brukere' }}
+    </button>
+    <button (click)="addTestUser()" [disabled]="loading">
+      Legg til test bruker
+    </button>
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Laster brukere...
+  </div>
+
+  <div *ngIf="!loading && users.length === 0 && !error" class="no-data">
+    Ingen brukere funnet
+  </div>
+
+  <div *ngIf="users.length > 0" class="users-list">
+    <div *ngFor="let user of users" class="user-card">
+      <h3>{{ user.name }}</h3>
+      <p>Email: {{ user.email }}</p>
+      <p>Opprettet: {{ user.createdAt | date:'dd.MM.yyyy HH:mm' }}</p>
+      <small>ID: {{ user.id }}</small>
+    </div>
+  </div>
+
+  <div class="api-info">
+    <small>API URL: {{ getApiUrl() }}</small>
+  </div>
+</div>

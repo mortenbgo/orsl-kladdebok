@@ -1,0 +1,51 @@
+<div class="app-container">
+  <header>
+    <h1>ORSL Kladdebok</h1>
+    <nav>
+      <a routerLink="/users" routerLinkActive="active">Brukere</a>
+    </nav>
+  </header>
+  
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<style>
+.app-container {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+header {
+  background-color: #f8f9fa;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+header h1 {
+  margin: 0 0 1rem 0;
+  color: #495057;
+}
+
+nav a {
+  color: #007bff;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  border-radius: 4px;
+}
+
+nav a:hover {
+  background-color: #e9ecef;
+}
+
+nav a.active {
+  background-color: #007bff;
+  color: white;
+}
+
+main {
+  padding: 2rem;
+}
+</style>
