@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://api.dev.example.com'
+  apiUrl: 'https://orsl-kladdebok-api-dev.azurewebsites.net'
 };
