@@ -21,6 +21,7 @@ jobs:
   provision-angular-app-service:
     name: "Provision Angular App Service for ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@31-miljø-i-angular
+    needs: build-angular-app
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
@@ -34,6 +35,7 @@ jobs:
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@31-miljø-i-angular
+    needs: provision-angular-app-service
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
@@ -47,6 +49,7 @@ jobs:
   deploy-db:
     name: "Deploy database til ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@31-miljø-i-angular
+    needs: provision-app-service
     with:
       environment: ${{ inputs.environment }}
       db-name: ${{vars.APP_NAME}}-api      
@@ -87,6 +90,19 @@ jobs:
       artifact-name: 'api'
       connection-string-name: 'KladdebokDbConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
+  
+  deploy-web:
+    name: "Deploy Web til ${{ inputs.environment }}"
+    needs: [provision-angular-app-service, build-angular-app]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
+    with:
+      environment: ${{ inputs.environment }}
+      commit-hash: ${{ github.sha }}
+      artifact-name: 'web'
     secrets: inherit
     permissions:
       contents: read
