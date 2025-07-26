@@ -7,10 +7,19 @@ on:
         required: true
         type: string
 jobs:
+  approve-environment:
+    name: "Godkjenn deploy til ${{ inputs.environment }}"
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Godkjenn deploy
+        run: |
+          echo "Godkjenner deploy til ${{ inputs.environment }}"
   
   build-angular-app:
     name: "Bygger Angular applikasjonen"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@31-miljø-i-angular 
+    needs: approve-environment
     with:
       environment: ${{ inputs.environment }}
       working-directory: 'web'
