@@ -16,8 +16,7 @@ jobs:
         run: |
           echo "Godkjenner deploy til ${{ inputs.environment }}"
           echo "Henter ut alle variabler  ${{ inputs.environment }}"
-          echo ${{ toJSON(vars) }}
-          
+          echo '${{ toJSON(vars) }}''
 
   
   build-angular-app:
