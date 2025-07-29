@@ -15,8 +15,9 @@ jobs:
       - name: Godkjenn deploy, hent ut alle variabler og secrets for mijøet og legg dem i en variabel som json
         run: |
           echo "Godkjenner deploy til ${{ inputs.environment }}"
-          echo "Henter ut alle variabler  ${{ inputs.environment }}"
-          echo '${{ toJSON(vars) }}''
+          echo "Henter ut alle variabler og secrets for ${{ inputs.environment }}"
+          echo '${{ toJSON(vars) }}'
+          echo '${{ toJSON(secrets) }}'
 
   
   build-angular-app:
