@@ -12,9 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - name: Godkjenn deploy
+      - name: Godkjenn deploy, hent ut alle variabler og secrets for mijøet og legg dem i en variabel som json
         run: |
           echo "Godkjenner deploy til ${{ inputs.environment }}"
+          echo "Henter ut alle variabler og secrets for miljøet ${{ inputs.environment }}"
+          echo "##[set-output name=environment_variables;]$(jq -n --arg env "${{ inputs.environment }}" '{"environment": $env}')"
+      - name: Print environment variables
+        run: |  
+          echo "Environment variables for ${{ inputs.environment }}: ${{ steps.approve-environment.outputs.environment_variables }}"  
+
   
   build-angular-app:
     name: "Bygger Angular applikasjonen"
