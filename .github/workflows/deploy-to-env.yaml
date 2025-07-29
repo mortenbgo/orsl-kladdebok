@@ -24,8 +24,8 @@ jobs:
           echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
           echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
     outputs:
-        vars_json: ${{ steps.approve.outputs.vars_json }}
-        secrets_json: ${{ steps.approve.outputs.secrets_json }}
+        vars_json: ${{ toJson(steps.approve.outputs.vars_json) }}
+        secrets_json: ${{ toJson(steps.approve.outputs.secrets_json) }}
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
