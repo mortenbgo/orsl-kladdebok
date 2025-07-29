@@ -116,7 +116,7 @@ jobs:
       artifact-name: 'api'
       connection-string-name: 'KladdebokDbConnection'
       # connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-      secrets-json:   ${{ needs.approve-environment.outputs.secrets_json }}
+      # secrets-json:   ${{ needs.approve-environment.outputs.secrets_json }}
       vars-json:      ${{ needs.approve-environment.outputs.vars_json }}
     secrets:
       secrets-json: ${{ needs.approve-environment.outputs.secrets_json }}
