@@ -118,11 +118,13 @@ jobs:
       # connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
       secrets-json:   ${{ needs.approve-environment.outputs.secrets_json }}
       vars-json:      ${{ needs.approve-environment.outputs.vars_json }}
-    secrets: inherit
+    secrets:
+      secrets-json: ${{ needs.approve-environment.outputs.secrets_json }}
     permissions:
       contents: read
       id-token: write
-  
+      
+
   # deploy-web:
   #   name: "Deploy Web til ${{ inputs.environment }}"
   #   needs: [provision-angular-app-service, build-angular-app]
