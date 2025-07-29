@@ -13,6 +13,7 @@ jobs:
     environment: ${{ inputs.environment }}
     steps:
       - name: Godkjenn deploy, hent ut alle variabler og secrets for mijøet og legg dem i to variabler som gjenbrukes av andre steg
+        id: approve
         run: |
           echo "Godkjenner deploy til ${{ inputs.environment }}"
           echo "Henter ut alle variabler og secrets for ${{ inputs.environment }}"
@@ -20,11 +21,11 @@ jobs:
           echo '${{ toJSON(secrets) }}'
           vars_json='${{ toJSON(vars) }}'
           secrets_json='${{ toJSON(secrets) }}'
-          echo "vars_json=$vars_json" >> $GITHUB_ENV
-          echo "secrets_json=$secrets_json" >> $GITHUB_ENV
+          echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
+          echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
     outputs:
-        vars_json: ${{ steps.vars.outputs.vars_json }}
-        secrets_json: ${{ steps.secrets.outputs.secrets_json }}
+        vars_json: ${{ steps.approve.outputs.vars_json }}
+        secrets_json: ${{ steps.approve.outputs.secrets_json }}
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
