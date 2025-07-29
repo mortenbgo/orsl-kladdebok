@@ -21,6 +21,11 @@ jobs:
           echo '${{ toJSON(secrets) }}'
           vars_json='${{ toJSON(vars) }}'
           secrets_json='${{ toJSON(secrets) }}'
+          
+          # Lagre som compressed JSON (én linje)
+          vars_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
+          secrets_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
+    
           echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
           echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
     outputs:
