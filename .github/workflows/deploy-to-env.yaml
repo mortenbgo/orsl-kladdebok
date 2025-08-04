@@ -25,6 +25,10 @@ jobs:
           # Lagre som compressed JSON (én linje)
           vars_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
           secrets_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
+
+          # print content for debugging
+          echo "Vars JSON: $vars_json"
+          echo "Secrets JSON: $secrets_json"
     
           echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
           echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
