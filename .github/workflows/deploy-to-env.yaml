@@ -36,6 +36,23 @@ jobs:
         vars_json: ${{ steps.approve.outputs.vars_json }}
         secrets_json: ${{ steps.approve.outputs.secrets_json }}
 
+
+  debug-before-deploy:
+    name: "Debug før deploy"
+    needs: [approve-environment]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug outputs fra approve-environment
+        run: |
+          echo "=== DEBUGGING OUTPUTS ==="
+          echo "vars_json fra approve-environment:"
+          echo '${{ needs.approve-environment.outputs.vars_json }}'
+          echo ""
+          echo "secrets_json fra approve-environment:"
+          echo '${{ needs.approve-environment.outputs.secrets_json }}'
+          echo ""
+          echo "=== END DEBUG ==="        
+
   # build-angular-app:
   #   name: "Bygger Angular applikasjonen"
   #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@31-miljø-i-angular 
@@ -112,7 +129,7 @@ jobs:
   deploy-api:
     name: "Deploy API til ${{ inputs.environment }}"
     # needs: [add-managed-id, deploy-db, approve-environment]
-    needs: [approve-environment]
+    needs: [approve-environment, debug-before-deploy]
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@31-miljø-i-angular    
     with:
       environment: ${{ inputs.environment }}
