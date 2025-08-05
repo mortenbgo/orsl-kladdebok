@@ -24,16 +24,14 @@ jobs:
 
           # Lagre som compressed JSON (én linje)
           vars_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
-          secrets_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
+          secrets_json=$(echo '${{ toJSON(secrets) }}' | jq -c -R .)
 
           # print content for debugging
           echo "Vars JSON: $vars_json"
           echo "Secrets JSON: $secrets_json"
     
-          # echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
-          # echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
-          echo "vars_json=${{ toJSON(vars) }}" >> $GITHUB_OUTPUT
-          echo "secrets_json=${{ toJSON(secrets) }}" >> $GITHUB_OUTPUT          
+          echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
+          echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
     outputs:
         vars_json: ${{ steps.approve.outputs.vars_json }}
         secrets_json: ${{ steps.approve.outputs.secrets_json }}
