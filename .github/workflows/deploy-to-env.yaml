@@ -6,152 +6,16 @@ on:
         description: "Environment man vil deploye til"
         required: true
         type: string
-
 jobs:
-  validate-deployment-order:
-    name: "Validate deployment order for ${{ inputs.environment }}"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Check deployment prerequisites
-        run: |
-          echo "🔍 Checking deployment order for ${{ inputs.environment }}"
-          
-          # Get the current commit SHA
-          COMMIT_SHA="${{ github.sha }}"
-          
-          # Check deployment order based on environment
-          case "${{ inputs.environment }}" in
-            "dev")
-              echo "✅ DEV deployment - no prerequisites required"
-              ;;
-            "qa")
-              echo "🔍 Checking if this commit is deployed to DEV..."
-              # Check if there's a successful deployment to DEV for this commit
-              dev_deployment=$(gh run list --workflow="deploy-to-env.yaml" --json conclusion,headSha,displayTitle --jq ".[] | select(.headSha==\"$COMMIT_SHA\" and .displayTitle | contains(\"DEV\") and .conclusion==\"success\")")
-              
-              if [[ -z "$dev_deployment" ]]; then
-                echo "❌ Cannot deploy to QA: This commit has not been successfully deployed to DEV"
-                echo "Please deploy to DEV first: $COMMIT_SHA"
-                exit 1
-              fi
-              echo "✅ DEV deployment verified for commit $COMMIT_SHA"
-              ;;
-            "prod")
-              echo "🔍 Checking if this commit is deployed to QA..."
-              # Check if there's a successful deployment to QA for this commit
-              qa_deployment=$(gh run list --workflow="deploy-to-env.yaml" --json conclusion,headSha,displayTitle --jq ".[] | select(.headSha==\"$COMMIT_SHA\" and .displayTitle | contains(\"QA\") and .conclusion==\"success\")")
-              
-              if [[ -z "$qa_deployment" ]]; then
-                echo "❌ Cannot deploy to PROD: This commit has not been successfully deployed to QA"
-                echo "Please deploy to QA first: $COMMIT_SHA"
-                exit 1
-              fi
-              echo "✅ QA deployment verified for commit $COMMIT_SHA"
-              ;;
-            *)
-              echo "❌ Unknown environment: ${{ inputs.environment }}"
-              exit 1
-              ;;
-          esac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  manual-approval:
-    name: "Manual Approval for ${{ inputs.environment }}"
-    needs: [validate-deployment-order]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create approval issue
-        id: create-issue
-        run: |
-          # Create an issue for manual approval
-          ISSUE_TITLE="🚀 Deploy Approval: ${{ inputs.environment }} - $(date +%Y-%m-%d_%H-%M)"
-          ISSUE_BODY="## Deployment Approval Request
-          
-          **Environment:** ${{ inputs.environment }}
-          **Commit:** ${{ github.sha }}
-          **Actor:** ${{ github.actor }}
-          **Workflow:** ${{ github.workflow }}
-          **Run ID:** ${{ github.run_id }}
-          
-          ### Deployment Details
-          - **Repository:** ${{ github.repository }}
-          - **Branch:** ${{ github.ref_name }}
-          - **Triggered by:** ${{ github.event_name }}
-          
-          ### Actions
-          To **APPROVE** this deployment, comment: \`✅ APPROVE\`
-          To **REJECT** this deployment, comment: \`❌ REJECT\`
-          
-          ---
-          *This issue was automatically created by GitHub Actions*"
-          
-          issue_number=$(gh issue create \
-            --title "$ISSUE_TITLE" \
-            --body "$ISSUE_BODY" \
-            --label "deployment-approval,${{ inputs.environment }}-deployment" \
-            --assignee "${{ github.actor }}" \
-            --json number --jq '.number')
-          
-          echo "issue_number=$issue_number" >> $GITHUB_OUTPUT
-          echo "📝 Created approval issue #$issue_number"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Wait for approval
-        run: |
-          issue_number="${{ steps.create-issue.outputs.issue_number }}"
-          echo "⏳ Waiting for approval on issue #$issue_number"
-          echo "🔗 View issue: ${{ github.server_url }}/${{ github.repository }}/issues/$issue_number"
-          
-          # Wait for approval comment
-          timeout=1800  # 30 minutes timeout
-          start_time=$(date +%s)
-          
-          while true; do
-            current_time=$(date +%s)
-            elapsed=$((current_time - start_time))
-            
-            if [[ $elapsed -gt $timeout ]]; then
-              echo "❌ Timeout: No approval received within 30 minutes"
-              gh issue comment $issue_number --body "❌ **TIMEOUT**: This deployment request has timed out after 30 minutes."
-              gh issue close $issue_number
-              exit 1
-            fi
-            
-            # Check for approval/rejection comments
-            comments=$(gh issue view $issue_number --json comments --jq '.comments[].body')
-            
-            if echo "$comments" | grep -q "✅ APPROVE"; then
-              echo "✅ Deployment APPROVED!"
-              gh issue comment $issue_number --body "✅ **APPROVED**: Deployment will proceed."
-              gh issue close $issue_number
-              break
-            elif echo "$comments" | grep -q "❌ REJECT"; then
-              echo "❌ Deployment REJECTED!"
-              gh issue comment $issue_number --body "❌ **REJECTED**: Deployment has been cancelled."
-              gh issue close $issue_number
-              exit 1
-            fi
-            
-            echo "⏳ Still waiting for approval... (${elapsed}s elapsed)"
-            sleep 30
-          done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   approve-environment:
     name: "Godkjenn deploy til ${{ inputs.environment }}"
-    needs: [manual-approval]
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Godkjenn deploy, hent ut alle variabler og secrets for mijøet og legg dem i to variabler som gjenbrukes av andre steg
         id: approve
         run: |
-          echo "✅ Deployment approved, proceeding with ${{ inputs.environment }}"
+          echo "Godkjenner deploy til ${{ inputs.environment }}"
           echo "Henter ut alle variabler og secrets for ${{ inputs.environment }}"
           echo '${{ toJSON(vars) }}'
           echo '${{ toJSON(secrets) }}'
@@ -159,8 +23,8 @@ jobs:
           secrets_json='${{ toJSON(secrets) }}'
 
           # Lagre som compressed JSON (én linje)
-          vars_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
-          secrets_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
+          vars_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
+          secrets_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
 
           # print content for debugging
           echo "Vars JSON:$vars_json"
@@ -266,7 +130,7 @@ jobs:
     name: "Deploy API til ${{ inputs.environment }}"
     # needs: [add-managed-id, deploy-db, approve-environment]
     needs: [approve-environment, debug-before-deploy]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@31-miljø-i-angular-niktsa    
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@31-miljø-i-angular    
     with:
       environment: ${{ inputs.environment }}
       commit-hash: ${{ github.sha }}
