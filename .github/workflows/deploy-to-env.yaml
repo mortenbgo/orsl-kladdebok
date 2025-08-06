@@ -130,7 +130,7 @@ jobs:
     name: "Deploy API til ${{ inputs.environment }}"
     # needs: [add-managed-id, deploy-db, approve-environment]
     needs: [approve-environment, debug-before-deploy]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@31-miljø-i-angular    
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@31-miljø-i-angular-niktsa    
     with:
       environment: ${{ inputs.environment }}
       commit-hash: ${{ github.sha }}
