@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main-niktsa
+      - main
   workflow_dispatch:
     
 jobs:
