@@ -134,21 +134,20 @@ jobs:
       artifact-name: 'api'
       connection-string-name: 'KladdebokDbConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-
+    secrets: inherit
     permissions:
       contents: read
       id-token: write
 
-  # deploy-web:
-  #   name: "Deploy Web til ${{ inputs.environment }}"
-  #   needs: [provision-angular-app-service, build-angular-app]
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     commit-hash: ${{ github.sha }}
-  #     artifact-name: 'web'
-
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
+  deploy-web:
+    name: "Deploy Web til ${{ inputs.environment }}"
+    needs: [provision-angular-app-service, build-angular-app]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
+    with:
+      environment: ${{ inputs.environment }}
+      commit-hash: ${{ github.sha }}
+      artifact-name: 'web'     
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
