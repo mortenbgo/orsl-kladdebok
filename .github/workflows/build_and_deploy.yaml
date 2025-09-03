@@ -13,6 +13,7 @@ jobs:
       working-directory: 'API'
       artifact-name: 'api'
       dotnet-version: '9.x'
+    secrets: inherit
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
