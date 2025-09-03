@@ -7,7 +7,7 @@ on:
 jobs:
   build-api:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@abf9d1cd1bd67460e47f0868a6a75c4372b27a7d
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
     with:
       environment: 'Totalt overflødig, må bort'
       working-directory: 'API'
