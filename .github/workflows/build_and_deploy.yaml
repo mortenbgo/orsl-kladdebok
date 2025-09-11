@@ -9,7 +9,7 @@ jobs:
     name: "Bygger applikasjonen"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
     with:
-      working-directory: './API'
+      project-directory: './API'
       artifact-name: 'api'
       dotnet-version: '9.x'
     secrets: inherit
