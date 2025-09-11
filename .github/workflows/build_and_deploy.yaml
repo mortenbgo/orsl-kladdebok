@@ -14,9 +14,18 @@ jobs:
       dotnet-version: '9.x'
     secrets: inherit
 
+  build-angular-app:
+    name: "Bygger Angular applikasjonen"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
+    with:
+      environment: ${{ inputs.environment }}
+      project-directory: 'web'
+      artifact-name: 'web'
+
+
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
-    needs: build-api
+    needs: [build-api, build-angular-app]
     strategy:
       max-parallel: 1
       fail-fast: true

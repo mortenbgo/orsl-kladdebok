@@ -53,19 +53,19 @@ jobs:
           echo ""
           echo "=== END DEBUG ==="
 
-  build-angular-app:
-    name: "Bygger Angular applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
-    needs: approve-environment
-    with:
-      environment: ${{ inputs.environment }}
-      project-directory: 'web'
-      artifact-name: 'web'
+  # build-angular-app:
+  #   name: "Bygger Angular applikasjonen"
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
+  #   needs: approve-environment
+  #   with:
+  #     environment: ${{ inputs.environment }}
+  #     project-directory: 'web'
+  #     artifact-name: 'web'
 
   provision-angular-app-service:
     name: "Provision Angular App Service for ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
-    needs: build-angular-app
+    needs: approve-environment
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
@@ -140,7 +140,7 @@ jobs:
 
   deploy-web:
     name: "Deploy Web til ${{ inputs.environment }}"
-    needs: [provision-angular-app-service, build-angular-app]
+    needs: [provision-angular-app-service]
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
     with:
       environment: ${{ inputs.environment }}
