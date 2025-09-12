@@ -7,7 +7,7 @@ on:
 jobs:
   build-api:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@116-fjerne-ubrukte-inputs
     with:
       project-directory: './API'
       artifact-name: 'api'
@@ -16,7 +16,7 @@ jobs:
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@24-håndtering-av-secrets-i-appsettings-ved-deploy
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@116-fjerne-ubrukte-inputs
     with:
       environment: ${{ inputs.environment }}
       project-directory: 'web'
