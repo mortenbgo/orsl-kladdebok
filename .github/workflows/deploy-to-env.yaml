@@ -133,7 +133,7 @@ jobs:
       artifact-name: 'api'
       connection-string-navn: 'KladdebokDbConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-      cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
+      # cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
     secrets: inherit
     permissions:
       contents: read
