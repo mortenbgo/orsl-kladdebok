@@ -122,6 +122,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
+      appsettingsPath: './API'
       connection-string-navn: 'KladdebokDbConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
       cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
