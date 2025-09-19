@@ -7,56 +7,10 @@ on:
         required: true
         type: string
 jobs:
-  approve-environment:
-    name: "Godkjenn deploy til ${{ inputs.environment }}"
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Godkjenn deploy, hent ut alle variabler og secrets for mijøet og legg dem i to variabler som gjenbrukes av andre steg
-        id: approve
-        run: |
-          echo "Godkjenner deploy til ${{ inputs.environment }}"
-          echo "Henter ut alle variabler og secrets for ${{ inputs.environment }}"
-          echo '${{ toJSON(vars) }}'
-          echo '${{ toJSON(secrets) }}'
-          vars_json='${{ toJSON(vars) }}'
-          secrets_json='${{ toJSON(secrets) }}'
-
-          # Lagre som compressed JSON (én linje)
-          vars_json=$(echo '${{ toJSON(secrets) }}' | jq -c .)
-          secrets_json=$(echo '${{ toJSON(vars) }}' | jq -c .)
-
-          # print content for debugging
-          echo "Vars JSON:$vars_json"
-          echo "Secrets JSON:$secrets_json"
-
-          echo "vars_json=$vars_json" >> $GITHUB_OUTPUT
-          echo "secrets_json=$secrets_json" >> $GITHUB_OUTPUT
-    outputs:
-        vars_json: ${{ steps.approve.outputs.vars_json }}
-        secrets_json: ${{ steps.approve.outputs.secrets_json }}
-
-
-  debug-before-deploy:
-    name: "Debug før deploy"
-    needs: [approve-environment]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug outputs fra approve-environment
-        run: |
-          echo "=== DEBUGGING OUTPUTS ==="
-          echo "vars_json fra approve-environment:"
-          echo '${{ needs.approve-environment.outputs.vars_json }}'
-          echo ""
-          echo "secrets_json fra approve-environment:"
-          echo '${{ needs.approve-environment.outputs.secrets_json }}'
-          echo ""
-          echo "=== END DEBUG ==="
 
   provision-angular-app-service:
     name: "Provision Angular App Service for ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@153-flere-appsettings-filer
-    needs: approve-environment
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.2
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
@@ -69,7 +23,7 @@ jobs:
 
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.2
     needs: provision-angular-app-service
     secrets: inherit
     with:
@@ -83,7 +37,7 @@ jobs:
 
   deploy-db:
     name: "Deploy database til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@v2.0.2
     needs: provision-app-service
     with:
       environment: ${{ inputs.environment }}
@@ -105,7 +59,7 @@ jobs:
   add-managed-id:
     name: "Legg til managed identity for ${{ inputs.environment }}"
     needs: [deploy-db, provision-app-service, print-connection-string-from-deploy-db]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@v2.0.2
     with:
       environment: ${{ inputs.environment }}
       app-name: ${{ vars.APP_NAME }}-api
@@ -117,12 +71,11 @@ jobs:
 
   deploy-api:
     name: "Deploy API til ${{ inputs.environment }}"
-    needs: [add-managed-id, deploy-db, approve-environment]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@153-flere-appsettings-filer
+    # needs: [add-managed-id, deploy-db, approve-environment]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@v2.0.2
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
-      appsettingsPath: './API'
       connection-string-navn: 'KladdebokDbConnection'
       connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
       cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
@@ -134,7 +87,7 @@ jobs:
   deploy-web:
     name: "Deploy Web til ${{ inputs.environment }}"
     needs: [provision-angular-app-service]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@v2.0.2
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'web'     

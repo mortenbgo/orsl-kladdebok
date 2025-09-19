@@ -7,7 +7,7 @@ on:
 jobs:
   build-api:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.2
     with:
       project-directory: './API'
       artifact-name: 'api'
@@ -16,40 +16,25 @@ jobs:
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@153-flere-appsettings-filer
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.2
     with:
-      environment: 'Environment skal ikke sendes inn'
+      environment: ${{ inputs.environment }}
       project-directory: 'web'
       artifact-name: 'web'
 
-  deploy-dev:
-    name: "Deploy til DEV"
+
+  deploy:
+    name: "Provision og deploy til ${{ matrix.environment }}"  
     needs: [build-api, build-angular-app]
+    strategy:
+      max-parallel: 1
+      fail-fast: true
+      matrix:
+        environment: [DEV, QA] 
     uses: ./.github/workflows/deploy-to-env.yaml 
     with:
-      environment: "DEV"
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
-
-  approve-qa:
-    name: "Godkjenn QA deployment"
-    runs-on: ubuntu-latest
-    needs: [deploy-dev]
-    environment: QA  # Kun denne jobben har environment protection
-    steps:
-      - name: Godkjenn QA deployment
-        run: echo "QA deployment godkjent"
-
-  deploy-qa:
-    name: "Deploy til QA med godkjenning"
-    needs: [build-api, build-angular-app, approve-qa]
-    uses: ./.github/workflows/deploy-to-env.yaml 
-    with:
-      environment: "QA"
+      environment: ${{ matrix.environment }}
     secrets: inherit
     permissions:
       contents: read
       id-token: write 
-
