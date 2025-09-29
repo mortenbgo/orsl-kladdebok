@@ -7,7 +7,7 @@ on:
 jobs:
   build-api:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.2
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@sonartest
     with:
       project-directory: './API'
       artifact-name: 'api'
@@ -16,7 +16,7 @@ jobs:
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.2
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@sonartest
     with:
       environment: ${{ inputs.environment }}
       project-directory: 'web'
