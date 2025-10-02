@@ -69,7 +69,7 @@ jobs:
 
   deploy-api:
     name: "Deploy API til ${{ inputs.environment }}"
-    # needs: [add-managed-id, deploy-db, approve-environment]
+    needs: [add-managed-id, deploy-db]
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@157-flytte-inputs-fra-shell-til-env
     with:
       environment: ${{ inputs.environment }}
