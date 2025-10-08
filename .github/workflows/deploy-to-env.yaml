@@ -15,7 +15,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'web'
-      ekstern-tilgang: false
+      ekstern-tilgang: true
     permissions:
       contents: read
       id-token: write
@@ -28,7 +28,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
-      ekstern-tilgang: false
+      ekstern-tilgang: true
     permissions:
       contents: read
       id-token: write
