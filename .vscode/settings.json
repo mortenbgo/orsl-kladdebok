@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "helse-vest-ikt",
+    "projectKey": "HelseVestIKT_orsl-kladdebok"
+  }
+}

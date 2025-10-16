@@ -7,6 +7,19 @@ on:
         required: true
         type: string
 jobs:
+  approve-prod:
+    if: ${{ inputs.environment == 'QA' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Vent på manuell godkjenning
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: "mortenbgo"
+          issue-title: "Deploying to prod from qa"
+          issue-body: "Please approve the installasjon to production."          
+          minimum-approvals: 1
+        
 
   provision-angular-app-service:
     name: "Provision Angular App Service for ${{ inputs.environment }}"
