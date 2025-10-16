@@ -8,7 +8,7 @@ on:
         type: string
 jobs:
   approve-prod:
-    if: ${{ inputs.environment == 'QA' }}
+    if: ${{ inputs.environment == 'DEV' }}
     runs-on: ubuntu-latest
     steps:
       - name: Vent på manuell godkjenning
