@@ -9,7 +9,7 @@ on:
 jobs:
   approve-prod:
     if: ${{ inputs.environment == 'DEV' }}
-    runs-on: ubuntu-latest
+    runs-on: self-hosted-windows
     steps:
       - name: Vent på manuell godkjenning
         uses: trstringer/manual-approval@v1
