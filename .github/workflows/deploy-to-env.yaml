@@ -20,7 +20,7 @@ jobs:
           secret: ${{ secrets.GITHUB_TOKEN }}
           approvers: "mortenbgo"
           fail-on-denial: true
-          issue-title: "Deploying to prod from qa"
+          issue-title: "Deploy med signal lissom"
           issue-body: "Please approve the installasjon to production."          
           minimum-approvals: 1
         
