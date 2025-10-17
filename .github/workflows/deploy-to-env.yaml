@@ -7,9 +7,12 @@ on:
         required: true
         type: string
 jobs:
-  approve-prod:
+  approve-env:
     if: ${{ inputs.environment == 'DEV' }}
     runs-on: self-hosted-linux
+    permissions:
+      contents: read
+      issues: write
     steps:
       - name: Vent på manuell godkjenning
         uses: trstringer/manual-approval@v1
@@ -20,12 +23,11 @@ jobs:
           issue-title: "Deploying to prod from qa"
           issue-body: "Please approve the installasjon to production."          
           minimum-approvals: 1
-    permissions:
-      contents: read
-      issues: write
         
 
   provision-angular-app-service:
+    needs: [approve-env]
+    if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
     name: "Provision Angular App Service for ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
     secrets: inherit
