@@ -8,7 +8,7 @@ on:
         type: string
 jobs:
   approve-env:
-    if: ${{ inputs.environment == 'DEV' }}
+    if: ${{ inputs.environment == 'PROD' }}
     runs-on: self-hosted-linux
     permissions:
       contents: read
