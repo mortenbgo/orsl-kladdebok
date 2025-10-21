@@ -30,7 +30,7 @@ jobs:
       max-parallel: 1
       fail-fast: true
       matrix:
-        environment: [DEV, QA] 
+        environment: [DEV, QA, PROD] 
     uses: ./.github/workflows/deploy-to-env.yaml 
     with:
       environment: ${{ matrix.environment }}
