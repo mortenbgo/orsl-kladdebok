@@ -104,10 +104,11 @@ jobs:
   deploy-web:
     name: "Deploy Web til ${{ inputs.environment }}"
     needs: [provision-angular-app-service]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
     with:
       environment: ${{ inputs.environment }}
-      artifact-name: 'web'     
+      artifact-name: 'web'   
+      commit-hash: ${{ github.sha }}  
     secrets: inherit
     permissions:
       contents: read
