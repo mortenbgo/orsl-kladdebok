@@ -21,7 +21,9 @@ jobs:
           approvers: "mortenbgo"
           fail-on-denial: true
           issue-title: "Deploy med signal lissom"
-          issue-body: "Please approve the installasjon to production."          
+          issue-body: "Please approve the installasjon to production." 
+          additional-approved-words: 'yay'
+          additional-denied-words: 'nay'                   
           minimum-approvals: 1
         
 
