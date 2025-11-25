@@ -33,7 +33,7 @@ jobs:
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-function.yaml@feature/function
     secrets: inherit
     with:
-      app-name: ${{ vars.APP_NAME }}
+      app-name: ${{ vars.APP_NAME }}-function
       environment: ${{ inputs.environment }}
       # artifact-name: 'api'
     permissions:
