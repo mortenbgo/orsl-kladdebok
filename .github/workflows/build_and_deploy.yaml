@@ -14,6 +14,15 @@ jobs:
   #     dotnet-version: '9.x'
   #   secrets: inherit
 
+  build-function:
+    name: "Bygger applikasjonen"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
+    with:
+      project-directory: './function'
+      artifact-name: 'function-app.zip'
+      dotnet-version: '9.x'
+    secrets: inherit
+
   # build-angular-app:
   #   name: "Bygger Angular applikasjonen"
   #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.9
@@ -26,6 +35,7 @@ jobs:
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
     # needs: [build-api, build-angular-app]
+    needs: [build-function]
     strategy:
       max-parallel: 1
       fail-fast: true
