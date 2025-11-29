@@ -16,7 +16,7 @@ jobs:
 
   build-function:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@feature/func
     with:
       project-directory: './function'
       artifact-name: 'function-app'
@@ -32,21 +32,21 @@ jobs:
   #     artifact-name: 'web'
 
 
-  deploy:
-    name: "Provision og deploy til ${{ matrix.environment }}"  
-    # needs: [build-api, build-angular-app]
-    needs: [build-function]
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-      matrix:
-        # environment: [DEV, QA, PROD] 
-        environment: [DEV] 
-    uses: ./.github/workflows/deploy-to-env.yaml 
-    with:
-      environment: ${{ matrix.environment }}
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
-      issues: write 
+  # deploy:
+  #   name: "Provision og deploy til ${{ matrix.environment }}"  
+  #   # needs: [build-api, build-angular-app]
+  #   needs: [build-function]
+  #   strategy:
+  #     max-parallel: 1
+  #     fail-fast: true
+  #     matrix:
+  #       # environment: [DEV, QA, PROD] 
+  #       environment: [DEV] 
+  #   uses: ./.github/workflows/deploy-to-env.yaml 
+  #   with:
+  #     environment: ${{ matrix.environment }}
+  #   secrets: inherit
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #     issues: write 
