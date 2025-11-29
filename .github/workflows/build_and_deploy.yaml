@@ -16,7 +16,7 @@ jobs:
 
   build-function:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@feature/func
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/func
     with:
       project-directory: './function'
       artifact-name: 'function-app'
