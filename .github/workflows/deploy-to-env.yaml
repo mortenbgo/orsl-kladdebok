@@ -45,6 +45,7 @@ jobs:
     needs: provision-function-app
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/func
     with:
+      function-app-name: ${{ vars.APP_NAME }}-function
       environment: ${{ inputs.environment }}
       artifact-name: 'function-app'
     secrets: inherit
