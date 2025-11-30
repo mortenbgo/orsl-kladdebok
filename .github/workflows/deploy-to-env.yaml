@@ -39,6 +39,18 @@ jobs:
     permissions:
       contents: read
       id-token: write
+
+  depoloy-function:
+    name: "Deploy Function App to ${{ inputs.environment }}"
+    needs: provision-function-app
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/func
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'function-app'
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
         
 
   # provision-angular-app-service:
