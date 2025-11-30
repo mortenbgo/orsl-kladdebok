@@ -48,6 +48,7 @@ jobs:
       function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
       environment: ${{ inputs.environment }}
       artifact-name: 'function-app'
+      resource-group: 'HVI-UTV-DEV-orsl-kladdebok-rg'
     secrets: inherit
     permissions:
       contents: read
