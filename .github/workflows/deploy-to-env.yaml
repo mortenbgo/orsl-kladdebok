@@ -30,7 +30,7 @@ jobs:
     # needs: [approve-env]
     # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
     name: "Provision Function App for ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-function.yaml@feature/function
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-function.yaml@feature/func
     secrets: inherit
     with:
       app-name: ${{ vars.APP_NAME }}-function
