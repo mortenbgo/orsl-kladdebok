@@ -49,6 +49,7 @@ jobs:
       environment: ${{ inputs.environment }}
       artifact-name: 'function-app'
       resource-group: 'HVI-UTV-DEV-orsl-kladdebok-rg'
+      cors: 'https://www.bt.no'
     secrets: inherit
     permissions:
       contents: read
