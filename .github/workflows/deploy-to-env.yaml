@@ -51,7 +51,7 @@ jobs:
         
 
   provision-angular-app-service:
-    # needs: [approve-env]
+    needs: [provision-function-app]
     # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
     name: "Provision Angular App Service for ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
@@ -67,7 +67,7 @@ jobs:
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
-    # needs: provision-angular-app-service
+    needs: [provision-angular-app-service]
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
