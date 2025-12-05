@@ -26,6 +26,15 @@ jobs:
   #         additional-denied-words: 'nay'                   
   #         minimum-approvals: 1
 
+
+  build-angular-app:
+    name: "Bygger Angular applikasjonen"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.9
+    with:
+      environment: ${{ inputs.environment }}
+      project-directory: 'web'
+      artifact-name: 'web'
+
   provision-function-app:
     # needs: [approve-env]
     # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
@@ -39,10 +48,100 @@ jobs:
     permissions:
       contents: read
       id-token: write
+        
+
+  provision-angular-app-service:
+    # needs: [approve-env]
+    if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
+    name: "Provision Angular App Service for ${{ inputs.environment }}"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'web'
+      ekstern-tilgang: false
+    permissions:
+      contents: read
+      id-token: write
+
+  provision-app-service:
+    name: "Deploy til ${{ inputs.environment }}"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
+    # needs: provision-angular-app-service
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'api'
+      ekstern-tilgang: false
+    permissions:
+      contents: read
+      id-token: write
+
+  deploy-db:
+    name: "Deploy database til ${{ inputs.environment }}"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@v2.0.9
+    needs: provision-app-service
+    with:
+      environment: ${{ inputs.environment }}
+      db-name: ${{vars.APP_NAME}}-api
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
+
+  print-connection-string-from-deploy-db:
+    name: "Print connection string for ${{ inputs.environment }}"
+    runs-on: ubuntu-latest
+    needs: deploy-db
+    steps:
+      - name: Print connection string
+        run: |
+          echo "Connection string for ${{ inputs.environment }}: ${{ needs.deploy-db.outputs.sqlconnectionstring }}"
+
+  add-managed-id:
+    name: "Legg til managed identity for ${{ inputs.environment }}"
+    needs: [deploy-db, provision-app-service, print-connection-string-from-deploy-db]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@v2.0.9
+    with:
+      environment: ${{ inputs.environment }}
+      app-name: ${{ vars.APP_NAME }}-api
+      sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
+
+  deploy-api:
+    name: "Deploy API til ${{ inputs.environment }}"
+    needs: [add-managed-id, deploy-db]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@v2.0.9
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'api'
+      connection-string-navn: 'KladdebokDbConnection'
+      connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
+      cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
+
+  deploy-web:
+    name: "Deploy Web til ${{ inputs.environment }}"
+    needs: [provision-angular-app-service]
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
+    with:
+      environment: ${{ inputs.environment }}
+      artifact-name: 'web'   
+      commit-hash: ${{ github.sha }}  
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
 
   depoloy-function:
     name: "Deploy Function App to ${{ inputs.environment }}"
-    needs: provision-function-app
+    needs: [provision-function-app]
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/func
     with:
       function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
@@ -54,93 +153,3 @@ jobs:
     permissions:
       contents: read
       id-token: write
-        
-
-  # provision-angular-app-service:
-  #   needs: [approve-env]
-  #   if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
-  #   name: "Provision Angular App Service for ${{ inputs.environment }}"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
-  #   secrets: inherit
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     artifact-name: 'web'
-  #     ekstern-tilgang: false
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-
-  # provision-app-service:
-  #   name: "Deploy til ${{ inputs.environment }}"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
-  #   needs: provision-angular-app-service
-  #   secrets: inherit
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     artifact-name: 'api'
-  #     ekstern-tilgang: false
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-
-  # deploy-db:
-  #   name: "Deploy database til ${{ inputs.environment }}"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@v2.0.9
-  #   needs: provision-app-service
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     db-name: ${{vars.APP_NAME}}-api
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-
-  # print-connection-string-from-deploy-db:
-  #   name: "Print connection string for ${{ inputs.environment }}"
-  #   runs-on: ubuntu-latest
-  #   needs: deploy-db
-  #   steps:
-  #     - name: Print connection string
-  #       run: |
-  #         echo "Connection string for ${{ inputs.environment }}: ${{ needs.deploy-db.outputs.sqlconnectionstring }}"
-
-  # add-managed-id:
-  #   name: "Legg til managed identity for ${{ inputs.environment }}"
-  #   needs: [deploy-db, provision-app-service, print-connection-string-from-deploy-db]
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@v2.0.9
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     app-name: ${{ vars.APP_NAME }}-api
-  #     sql-connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-
-  # deploy-api:
-  #   name: "Deploy API til ${{ inputs.environment }}"
-  #   needs: [add-managed-id, deploy-db]
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@v2.0.9
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     artifact-name: 'api'
-  #     connection-string-navn: 'KladdebokDbConnection'
-  #     connection-string: ${{ needs.deploy-db.outputs.sqlconnectionstring }}
-  #     cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
-
-  # deploy-web:
-  #   name: "Deploy Web til ${{ inputs.environment }}"
-  #   needs: [provision-angular-app-service]
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@31-miljø-i-angular
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     artifact-name: 'web'   
-  #     commit-hash: ${{ github.sha }}  
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
