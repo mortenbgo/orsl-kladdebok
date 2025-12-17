@@ -6,6 +6,9 @@ on:
         description: "Environment man vil deploye til"
         required: true
         type: string
+env:
+  APP_NAME: "orsl-kladdebok"
+  WEB_ARTIFACT_NAME: "web-${{ inputs.environment }}"
 jobs:
   # approve-env:
   #   if: ${{ inputs.environment == 'DEV' }}
@@ -33,7 +36,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       project-directory: 'web'
-      artifact-name: 'web'
+      artifact-name: "web-${{ inputs.environment }}"
 
   provision-function-app:
     # needs: [approve-env]
@@ -133,7 +136,7 @@ jobs:
     uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-angular-app.yaml@v2.0.9
     with:
       environment: ${{ inputs.environment }}
-      artifact-name: 'web'   
+      artifact-name: "web-${{ inputs.environment }}"   
     secrets: inherit
     permissions:
       contents: read
