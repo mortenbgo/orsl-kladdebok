@@ -150,7 +150,7 @@ jobs:
       function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
       environment: ${{ inputs.environment }}
       artifact-name: 'function-app'
-      resource-group: 'HVI-UTV-DEV-orsl-kladdebok-rg'
+      resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
       cors: 'https://www.bt.no'
     secrets: inherit
     permissions:
