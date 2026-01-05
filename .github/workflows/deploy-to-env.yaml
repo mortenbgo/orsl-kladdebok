@@ -32,9 +32,9 @@ jobs:
 
   build-angular-app:
     name: "Bygger Angular applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@feature/func_med_main
     with:
-      environment: ${{ inputs.environment }}
+      # environment: ${{ inputs.environment }}
       project-directory: 'web'
       artifact-name: "web-${{ inputs.environment }}"
 
@@ -57,7 +57,7 @@ jobs:
     needs: [provision-function-app]
     # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
     name: "Provision Angular App Service for ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@feature/func_med_main
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
@@ -69,7 +69,7 @@ jobs:
 
   provision-app-service:
     name: "Deploy til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/provision-app-service.yaml@feature/func_med_main
     needs: [provision-angular-app-service]
     secrets: inherit
     with:
@@ -82,7 +82,7 @@ jobs:
 
   deploy-db:
     name: "Deploy database til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@feature/func_med_main
     needs: provision-app-service
     with:
       environment: ${{ inputs.environment }}
@@ -104,7 +104,7 @@ jobs:
   add-managed-id:
     name: "Legg til managed identity for ${{ inputs.environment }}"
     needs: [deploy-db, provision-app-service, print-connection-string-from-deploy-db]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/add-managedid-to-database.yaml@feature/func_med_main
     with:
       environment: ${{ inputs.environment }}
       app-name: ${{ vars.APP_NAME }}-api
@@ -117,7 +117,7 @@ jobs:
   deploy-api:
     name: "Deploy API til ${{ inputs.environment }}"
     needs: [add-managed-id, deploy-db]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@v2.0.9
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-dotnet-app.yaml@feature/func_med_main
     with:
       environment: ${{ inputs.environment }}
       artifact-name: 'api'
