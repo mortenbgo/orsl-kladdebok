@@ -47,6 +47,7 @@ jobs:
     with:
       app-name: ${{ vars.APP_NAME }}
       environment: ${{ inputs.environment }}
+      dotnet-version: 'v9.0'
       # artifact-name: 'api'
     permissions:
       contents: read
