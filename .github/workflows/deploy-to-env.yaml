@@ -151,7 +151,7 @@ jobs:
       environment: ${{ inputs.environment }}
       artifact-name: 'function-app'
       resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-      cors: 'https://www.bt.no'
+      cors: 'https://www.bt.no, https://portal.azure.com'
     secrets: inherit
     permissions:
       contents: read
