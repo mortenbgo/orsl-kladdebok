@@ -23,21 +23,21 @@ jobs:
       dotnet-version: '9.x'
     secrets: inherit
 
-  deploy:
-    name: "Provision og deploy til ${{ matrix.environment }}"  
-    needs: [build-api, build-function]
+  # deploy:
+  #   name: "Provision og deploy til ${{ matrix.environment }}"  
+  #   needs: [build-api, build-function]
     
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-      matrix:
-        # environment: [DEV, QA, PROD] 
-        environment: [DEV, QA] 
-    uses: ./.github/workflows/deploy-to-env.yaml 
-    with:
-      environment: ${{ matrix.environment }}
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
-      issues: write 
+  #   strategy:
+  #     max-parallel: 1
+  #     fail-fast: true
+  #     matrix:
+  #       # environment: [DEV, QA, PROD] 
+  #       environment: [DEV, QA] 
+  #   uses: ./.github/workflows/deploy-to-env.yaml 
+  #   with:
+  #     environment: ${{ matrix.environment }}
+  #   secrets: inherit
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #     issues: write 
