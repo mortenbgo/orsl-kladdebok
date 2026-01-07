@@ -83,7 +83,7 @@ jobs:
 
   deploy-db:
     name: "Deploy database til ${{ inputs.environment }}"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@feature/func_med_main
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-database.yaml@feature/db_elastic_pool
     needs: provision-app-service
     with:
       environment: ${{ inputs.environment }}
