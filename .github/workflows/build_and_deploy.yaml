@@ -5,33 +5,34 @@ on:
   workflow_dispatch:
     
 jobs:
-  # build-api:
-  #   name: "Bygger applikasjonen"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
-  #   with:
-  #     project-directory: './API'
-  #     artifact-name: 'api'
-  #     dotnet-version: '9.x'
-  #   secrets: inherit
+  build-api:
+    name: "Bygger applikasjonen"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
+    with:
+      project-directory: './API'
+      artifact-name: 'api'
+      dotnet-version: '9.x'
+    secrets: inherit
 
-  # build-angular-app:
-  #   name: "Bygger Angular applikasjonen"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-angular-app.yaml@v2.0.9
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     project-directory: 'web'
-  #     artifact-name: 'web'
-
+  build-function:
+    name: "Bygger applikasjonen"
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@main
+    with:
+      project-directory: './function'
+      artifact-name: 'function-app'
+      dotnet-version: '9.x'
+    secrets: inherit
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
-    # needs: [build-api, build-angular-app]
+    needs: [build-api, build-function]
+    
     strategy:
       max-parallel: 1
       fail-fast: true
       matrix:
         # environment: [DEV, QA, PROD] 
-        environment: [DEV] 
+        environment: [DEV, QA] 
     uses: ./.github/workflows/deploy-to-env.yaml 
     with:
       environment: ${{ matrix.environment }}
