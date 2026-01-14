@@ -17,6 +17,10 @@ jobs:
       id-token: write
     environment: ${{ inputs.environment }}
     steps:
+      - name: Print environment
+        run: |
+          echo "Deploying to environment: ${{ inputs.environment }}"
+
       - name: Azure Login
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/azure-login@main
         with:
