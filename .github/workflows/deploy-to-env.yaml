@@ -20,10 +20,10 @@ jobs:
       - name: Azure Login
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/azure-login@main
         with:
-          environment: ${{ inputs.environment }}
-          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          environment: ${{ env.ENVIRONMENT }}
+          azure-client-id: ${{ secrets[format('AZURE_CLIENT_ID_{0}', env.ENVIRONMENT)] }}
+          azure-tenant-id: ${{ secrets[format('AZURE_TENANT_ID_{0}', env.ENVIRONMENT)] }}
+          azure-subscription-id: ${{ secrets[format('AZURE_SUBSCRIPTION_ID_{0}', env.ENVIRONMENT)] }}
 
 
   # approve-env:

@@ -15,19 +15,18 @@ jobs:
   #     dotnet-version: '10.x'
   #   secrets: inherit
 
-  build-function:
-    name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
-    with:
-      project-directory: './function'
-      artifact-name: 'function-app'
-      dotnet-version: '10.x'
-    secrets: inherit
+  # build-function:
+  #   name: "Bygger applikasjonen"
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
+  #   with:
+  #     project-directory: './function'
+  #     artifact-name: 'function-app'
+  #     dotnet-version: '10.x'
+  #   secrets: inherit
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
     # needs: [build-api, build-function]
-    needs: [build-function]
     
     strategy:
       max-parallel: 1
