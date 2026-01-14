@@ -20,6 +20,7 @@ jobs:
       - name: Print environment
         run: |
           echo "Deploying to environment: ${{ inputs.environment }}"
+          echo "client id: ${{ secrets[format('AZURE_CLIENT_ID_{0}', inputs.environment)] }}"
 
       - name: Azure Login
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/azure-login@main
