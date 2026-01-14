@@ -5,39 +5,39 @@ on:
   workflow_dispatch:
     
 jobs:
-  build-api:
-    name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
-    with:
-      project-directory: './API'
-      artifact-name: 'api'
-      dotnet-version: '9.x'
-    secrets: inherit
+  # build-api:
+  #   name: "Bygger applikasjonen"
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
+  #   with:
+  #     project-directory: './API'
+  #     artifact-name: 'api'
+  #     dotnet-version: '10.x'
+  #   secrets: inherit
 
   build-function:
     name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@main
+    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
     with:
       project-directory: './function'
       artifact-name: 'function-app'
-      dotnet-version: '9.x'
+      dotnet-version: '10.x'
     secrets: inherit
 
-  deploy:
-    name: "Provision og deploy til ${{ matrix.environment }}"  
-    needs: [build-api, build-function]
+  # deploy:
+  #   name: "Provision og deploy til ${{ matrix.environment }}"  
+  #   needs: [build-api, build-function]
     
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-      matrix:
-        # environment: [DEV, QA, PROD] 
-        environment: [DEV, QA] 
-    uses: ./.github/workflows/deploy-to-env.yaml 
-    with:
-      environment: ${{ matrix.environment }}
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
-      issues: write 
+  #   strategy:
+  #     max-parallel: 1
+  #     fail-fast: true
+  #     matrix:
+  #       # environment: [DEV, QA, PROD] 
+  #       environment: [DEV, QA] 
+  #   uses: ./.github/workflows/deploy-to-env.yaml 
+  #   with:
+  #     environment: ${{ matrix.environment }}
+  #   secrets: inherit
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #     issues: write 
