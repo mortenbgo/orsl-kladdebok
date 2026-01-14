@@ -54,22 +54,18 @@ jobs:
   #     project-directory: 'web'
   #     artifact-name: "web-${{ inputs.environment }}"
 
-  # provision-function-app:
-  #   # needs: [approve-env]
-  #   # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
-  #   name: "Provision Function App for ${{ inputs.environment }}"
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
-  #   secrets: inherit
-  #   with:
-  #     environment: ${{ inputs.environment }}
-  #     function-app-name: ${{ vars.APP_NAME }}
-  #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+    # needs: [approve-env]
+    # if: ${{ always() && (inputs.environment != 'DEV' || needs.approve-env.result == 'success') }}
+      - name: "Provision Function App for ${{ inputs.environment }}"
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          function-app-name: ${{ vars.APP_NAME }}
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          dotnet-version: 'v9.0'
+          storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
+          
 
-  #     dotnet-version: 'v9.0'
-  #     # artifact-name: 'api'
-  #   permissions:
-  #     contents: read
-  #     id-token: write
         
 
   # provision-angular-app-service:
