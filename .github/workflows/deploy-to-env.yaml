@@ -177,17 +177,17 @@ jobs:
   #     contents: read
   #     id-token: write
 
-  deploy-function:
-    name: "Deploy Function App to ${{ inputs.environment }}"  
-    needs: [provision-function-app]
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/function-as-compaction
-    with:
-      function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
-      environment: ${{ inputs.environment }}
-      artifact-name: 'function-app'
-      resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-      cors: 'https://www.bt.no, https://portal.azure.com'
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
+  # deploy-function:
+  #   name: "Deploy Function App to ${{ inputs.environment }}"  
+  #   needs: [provision-function-app]
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/function-as-compaction
+  #   with:
+  #     function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
+  #     environment: ${{ inputs.environment }}
+  #     artifact-name: 'function-app'
+  #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+  #     cors: 'https://www.bt.no, https://portal.azure.com'
+  #   secrets: inherit
+  #   permissions:
+  #     contents: read
+  #     id-token: write
