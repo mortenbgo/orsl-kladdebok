@@ -17,29 +17,13 @@ jobs:
       id-token: write
     environment: ${{ inputs.environment }}
     steps:
-      - name: Parse Azure Config
-        id: config
-        env:
-          AZURE_CONFIG: ${{ vars.AZURE_CONFIG }}
-        run: |
-          # NOTE: The error message "(...) ikke provisjonert (...)" is used by
-          # the vending machine (New-App.ps1) to detect failed initial deployments.
-          if [ -z "$AZURE_CONFIG" ]; then
-            echo "::error::Dette repoet er ikke provisjonert enda. Opprett en PR i vending-machine repoet for denne appen: https://github.com/HelseVestIKT/HVI-UTV-Plattform/tree/main/apps"
-            exit 1
-          fi
-
-          APP_NAME=$(echo "$AZURE_CONFIG" | jq -r '.appServiceName')
-          RESOURCE_GROUP=$(echo "$AZURE_CONFIG" | jq -r '.resourceGroupName')
-
-          echo "app-name=$APP_NAME" >> $GITHUB_OUTPUT
-          echo "resource-group=$RESOURCE_GROUP" >> $GITHUB_OUTPUT
-          echo "api-app-name=$APP_NAME-api" >> $GITHUB_OUTPUT
-        
       - name: Azure Login
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/azure-login-v2@main
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/azure-login@main
         with:
-          azure-config: ${{ vars.AZURE_CONFIG }}
+          environment: ${{ inputs.environment }}
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 
   # approve-env:
