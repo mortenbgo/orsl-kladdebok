@@ -71,6 +71,7 @@ jobs:
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
           dotnet-version: 'v9.0'
           storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
+      
           
 
         
@@ -165,16 +166,22 @@ jobs:
   #     id-token: write
 
   # deploy-function:
-  #   name: "Deploy Function App to ${{ inputs.environment }}"  
-  #   needs: [provision-function-app]
-  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/deploy-function-app.yaml@feature/function-as-compaction
-  #   with:
-  #     function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
-  #     environment: ${{ inputs.environment }}
-  #     artifact-name: 'function-app'
-  #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-  #     cors: 'https://www.bt.no, https://portal.azure.com'
-  #   secrets: inherit
-  #   permissions:
-  #     contents: read
-  #     id-token: write
+      - name: "Deploy Function App to ${{ inputs.environment }}"  
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/function-app@feature/function-as-compaction
+        with:
+          function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
+          environment: ${{ inputs.environment }}
+          artifact-name: 'function-app'
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          cors: 'https://www.bt.no, https://portal.azure.com'
+          vars-json: |
+            {
+              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+              "AzureWebJobsStorage": "${{ secrets[format('AZURE_STORAGE_CONNECTION_STRING_{0}', inputs.environment)] }}",
+              "WEBSITE_RUN_FROM_PACKAGE": "1"
+            }
+          secrets-json: |
+            {
+              "SqlConnectionString": "${{ secrets[format('SQL_CONNECTION_STRING_{0}', inputs.environment)] }}"
+            }
+          
