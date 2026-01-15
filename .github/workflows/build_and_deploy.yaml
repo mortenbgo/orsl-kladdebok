@@ -35,7 +35,7 @@ jobs:
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
-    # needs: [build-api, build-function]
+    needs: [build]
     
     strategy:
       max-parallel: 1
