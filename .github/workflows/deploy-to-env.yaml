@@ -174,14 +174,6 @@ jobs:
           artifact-name: 'function-app'
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
           cors: 'https://www.bt.no, https://portal.azure.com'
-          vars-json: |
-            {
-              "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-              "AzureWebJobsStorage": "${{ secrets[format('AZURE_STORAGE_CONNECTION_STRING_{0}', inputs.environment)] }}",
-              "WEBSITE_RUN_FROM_PACKAGE": "1"
-            }
-          secrets-json: |
-            {
-              "SqlConnectionString": "${{ secrets[format('SQL_CONNECTION_STRING_{0}', inputs.environment)] }}"
-            }
+          vars-json: ${{ toJSON(vars) }}
+          secrets-json: ${{ toJSON(secrets) }}
           
