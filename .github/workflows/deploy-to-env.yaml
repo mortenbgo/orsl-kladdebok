@@ -73,7 +73,7 @@ jobs:
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@main
         with:          
           artifact-name: "web-${{ inputs.environment }}"   
-          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-web
+          app-name: ${{ vars.APP_NAME }}
           vars-json: ${{ toJSON(vars) }}
 
       - name: "Deploy API App to ${{ inputs.environment }}"  
