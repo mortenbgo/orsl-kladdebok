@@ -46,7 +46,7 @@ jobs:
         with:
           environment: ${{ inputs.environment }}
           artifact-name: 'web'
-          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-web
+          app-name: ${{ vars.APP_NAME }}
           #set external-access to true if environment is QA or PROD
           external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
