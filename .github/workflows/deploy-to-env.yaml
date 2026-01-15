@@ -9,6 +9,7 @@ on:
 env:
   APP_NAME: "orsl-kladdebok"
   WEB_ARTIFACT_NAME: "web-${{ inputs.environment }}"
+  APP_SERVICE_PLAN_ID: "/subscriptions/470ca611-e54c-49b1-b5e5-07fcfb8c3c08/resourceGroups/HVI-UTVIKLING-DEV-FELLES-rg/providers/Microsoft.Web/serverfarms/HVI-UTVIKLING-DEV-dotnet5-AppServicePlan"
 jobs:
   deploy:
     name: "Deploy til ${{ inputs.environment }}"
@@ -50,7 +51,7 @@ jobs:
           #set external-access to true if environment is QA or PROD
           external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          app-service-plan-name: 'HVI-UTVIKLING-${{ inputs.environment }}-dotnet5-AppServicePlan'
+          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_ID }}
 
       - name: Provision API app service for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@main
@@ -60,7 +61,8 @@ jobs:
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
           external-access: false
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
-          app-service-plan-name: 'HVI-UTVIKLING-${{ inputs.environment }}-dotnet5-AppServicePlan'
+          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_ID }}
+          
 
       - name: Provision Function App for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
