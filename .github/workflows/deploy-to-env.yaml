@@ -9,7 +9,8 @@ on:
 env:
   APP_NAME: "orsl-kladdebok"
   WEB_ARTIFACT_NAME: "web-${{ inputs.environment }}"
-  APP_SERVICE_PLAN_ID: "/subscriptions/470ca611-e54c-49b1-b5e5-07fcfb8c3c08/resourceGroups/HVI-UTVIKLING-DEV-FELLES-rg/providers/Microsoft.Web/serverfarms/HVI-UTVIKLING-DEV-dotnet5-AppServicePlan"
+  APP_SERVICE_PLAN_NAME: "HVI-UTVIKLING-${{ inputs.environment }}-dotnet5-AppServicePlan"
+  APP_SERVICE_PLAN_RESOURCE_GROUP_NAME: "HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg"
 jobs:
   deploy:
     name: "Deploy til ${{ inputs.environment }}"
@@ -38,12 +39,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build angular app
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@main
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@feature/function-as-compaction
         with:
           project-directory: 'web'
           artifact-name: "web-${{ inputs.environment }}"
       - name: Provision angular app service for ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@main
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
           artifact-name: 'web'
@@ -51,18 +52,19 @@ jobs:
           #set external-access to true if environment is QA or PROD
           external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_ID }}
+          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision API app service for ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@main
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
           artifact-name: 'api'
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
           external-access: false
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
-          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_ID }}
-          
+          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision Function App for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
@@ -74,7 +76,7 @@ jobs:
           storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
 
       - name: Deploy Angular App to ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@main
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
         with:          
           artifact-name: "web-${{ inputs.environment }}"   
           app-name: ${{ vars.APP_NAME }}
