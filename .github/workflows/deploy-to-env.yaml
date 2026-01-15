@@ -50,6 +50,8 @@ jobs:
           #set external-access to true if environment is QA or PROD
           external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          app-service-plan-name: 'HVI-UTVIKLING-${{ inputs.environment }}-dotnet5-AppServicePlan'
+
       - name: Provision API app service for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@main
         with:
