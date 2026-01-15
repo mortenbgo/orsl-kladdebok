@@ -32,6 +32,9 @@ jobs:
           azure-tenant-id: ${{ secrets[format('AZURE_TENANT_ID_{0}', inputs.environment)] }}
           azure-subscription-id: ${{ secrets[format('AZURE_SUBSCRIPTION_ID_{0}', inputs.environment)] }}
 
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build angular app
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@main
         with:
