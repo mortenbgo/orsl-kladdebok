@@ -57,7 +57,8 @@ jobs:
           artifact-name: 'api'
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
           external-access: false
-          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'          
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
+          app-service-plan-name: 'HVI-UTVIKLING-${{ inputs.environment }}-dotnet5-AppServicePlan'
 
       - name: Provision Function App for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
