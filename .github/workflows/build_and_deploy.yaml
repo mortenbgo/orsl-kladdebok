@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     
 jobs:
-  build:
+  build-function:
     runs-on: ubuntu-latest
     steps:
       - name: Build function app
@@ -14,6 +14,15 @@ jobs:
         with:
           project-directory: './function'
           artifact-name: 'function-app'
+          dotnet-version: '10.x'
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build API app
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-app@feature/function-as-compaction
+        with:
+          project-directory: './API'
+          artifact-name: 'api'
           dotnet-version: '10.x'
   # build-api:
   #   name: "Bygger applikasjonen"
@@ -35,7 +44,7 @@ jobs:
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
-    needs: [build]
+    needs: [build-function, build-api]
     
     strategy:
       max-parallel: 1
