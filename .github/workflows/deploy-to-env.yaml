@@ -52,7 +52,7 @@ jobs:
           #set external-access to true if environment is QA or PROD
           external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
           app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision API app service for ${{ inputs.environment }}
@@ -63,7 +63,7 @@ jobs:
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
           external-access: false
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
-          app-service-plan-name: ${{ vars.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
           app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision Function App for ${{ inputs.environment }}
