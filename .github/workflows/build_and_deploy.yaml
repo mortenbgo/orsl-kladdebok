@@ -6,6 +6,15 @@ on:
   workflow_dispatch:
     
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build function app
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/function-app@feature/function-as-compaction
+        with:
+          project-directory: './function'
+          artifact-name: 'function-app'
+          dotnet-version: '10.x'
   # build-api:
   #   name: "Bygger applikasjonen"
   #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
@@ -15,14 +24,14 @@ jobs:
   #     dotnet-version: '10.x'
   #   secrets: inherit
 
-  build-function:
-    name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/function-app@feature/function-as-compaction
-    with:
-      project-directory: './function'
-      artifact-name: 'function-app'
-      dotnet-version: '10.x'
-    secrets: inherit
+  # build-function:
+  #   name: "Bygger applikasjonen"
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
+  #   with:
+  #     project-directory: './function'
+  #     artifact-name: 'function-app'
+  #     dotnet-version: '10.x'
+  #   secrets: inherit
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
