@@ -38,33 +38,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build angular app
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@feature/function-as-compaction
-        with:
-          project-directory: 'web'
-          artifact-name: "web-${{ inputs.environment }}"
-      - name: Provision angular app service for ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
-        with:
-          environment: ${{ inputs.environment }}
-          artifact-name: 'web'
-          app-name: ${{ vars.APP_NAME }}
-          #set external-access to true if environment is QA or PROD
-          external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
-          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
-          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
+      # - name: Build angular app
+      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@feature/function-as-compaction
+      #   with:
+      #     project-directory: 'web'
+      #     artifact-name: "web-${{ inputs.environment }}"
+      # - name: Provision angular app service for ${{ inputs.environment }}
+      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
+      #   with:
+      #     environment: ${{ inputs.environment }}
+      #     artifact-name: 'web'
+      #     app-name: ${{ vars.APP_NAME }}
+      #     #set external-access to true if environment is QA or PROD
+      #     external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
+      #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+      #     app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
+      #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
-      - name: Provision API app service for ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
-        with:
-          environment: ${{ inputs.environment }}
-          artifact-name: 'api'
-          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
-          external-access: false
-          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
-          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
-          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
+      # - name: Provision API app service for ${{ inputs.environment }}
+      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
+      #   with:
+      #     environment: ${{ inputs.environment }}
+      #     artifact-name: 'api'
+      #     app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
+      #     external-access: false
+      #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
+      #     app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
+      #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision Function App for ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
@@ -75,26 +75,26 @@ jobs:
           dotnet-version: 'v9.0'
           storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
 
-      - name: Deploy Angular App to ${{ inputs.environment }}
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
-        with:          
-          artifact-name: "web-${{ inputs.environment }}"   
-          app-name: ${{ vars.APP_NAME }}
-          vars-json: ${{ toJSON(vars) }}
+      # - name: Deploy Angular App to ${{ inputs.environment }}
+      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
+      #   with:          
+      #     artifact-name: "web-${{ inputs.environment }}"   
+      #     app-name: ${{ vars.APP_NAME }}
+      #     vars-json: ${{ toJSON(vars) }}
 
-      - name: "Deploy API App to ${{ inputs.environment }}"  
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-app@feature/function-as-compaction
-        with:
-          environment: ${{ inputs.environment }}
-          artifact-name: 'api'
-          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
-          connection-string-navn: 'KladdebokDbConnection'
-          # Using a placeholder for connection string, replace with actual secret or output from DB deployment
-          connection-string: ${{ secrets[format('SQL_CONNECTION_STRING_{0}', inputs.environment)] }}
-          cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
-          azure-appsettings: true
-          vars-json: ${{ toJSON(vars) }}
-          secrets-json: ${{ toJSON(secrets) }}
+      # - name: "Deploy API App to ${{ inputs.environment }}"  
+      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-app@feature/function-as-compaction
+      #   with:
+      #     environment: ${{ inputs.environment }}
+      #     artifact-name: 'api'
+      #     app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
+      #     connection-string-navn: 'KladdebokDbConnection'
+      #     # Using a placeholder for connection string, replace with actual secret or output from DB deployment
+      #     connection-string: ${{ secrets[format('SQL_CONNECTION_STRING_{0}', inputs.environment)] }}
+      #     cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
+      #     azure-appsettings: true
+      #     vars-json: ${{ toJSON(vars) }}
+      #     secrets-json: ${{ toJSON(secrets) }}
       
       # - name: "Deploy Function App to ${{ inputs.environment }}"  
       #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/function-app@feature/function-as-compaction
