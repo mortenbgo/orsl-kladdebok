@@ -66,14 +66,14 @@ jobs:
           app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
           app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
-      # - name: Provision Function App for ${{ inputs.environment }}
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     function-app-name: ${{ vars.APP_NAME }}
-      #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-      #     dotnet-version: 'v9.0'
-      #     storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
+      - name: Provision Function App for ${{ inputs.environment }}
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          function-app-name: ${{ vars.APP_NAME }}
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          dotnet-version: 'v9.0'
+          storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
 
       - name: Deploy Angular App to ${{ inputs.environment }}
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
