@@ -70,7 +70,7 @@ jobs:
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
-          function-app-name: ${{ vars.APP_NAME }}
+          function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
           dotnet-version: 'v9.0'
           storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
