@@ -106,6 +106,14 @@ jobs:
           cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           vars-json: ${{ toJSON(vars) }}
           secrets-json: ${{ toJSON(secrets) }}
+
+      - name: Provision database for ${{ inputs.environment }}
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          database-name: ${{ vars.APP_NAME }}-api
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          sql-server-name: 'felles-db-${{ inputs.environment }}-dev-managedid.database.windows.net'
   
 
   # deploy-db:
