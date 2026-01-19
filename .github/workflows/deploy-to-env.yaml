@@ -112,7 +112,7 @@ jobs:
         with:
           environment: ${{ inputs.environment }}
           database-name: ${{ vars.APP_NAME }}-api
-          sql-server-resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'          
+          sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}.-managedid'
   
 
