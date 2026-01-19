@@ -113,7 +113,7 @@ jobs:
           environment: ${{ inputs.environment }}
           database-name: ${{ vars.APP_NAME }}-api
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          sql-server-name: 'felles-db-${{ inputs.environment }}-dev-managedid.database.windows.net'
+          sql-server-name: 'felles-db-${{ inputs.environment }}-managedid.database.windows.net'
   
 
   # deploy-db:
