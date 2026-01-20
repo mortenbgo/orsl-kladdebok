@@ -67,6 +67,7 @@ jobs:
       #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
       - name: Provision Function App for ${{ inputs.environment }}
+        id: provision_function_app
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
@@ -97,6 +98,7 @@ jobs:
       #     secrets-json: ${{ toJSON(secrets) }}
       
       - name: "Deploy Function App to ${{ inputs.environment }}"  
+        id: deploy_function
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-function-app@feature/function-as-compaction
         with:
           function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
@@ -108,13 +110,22 @@ jobs:
           secrets-json: ${{ toJSON(secrets) }}
 
       - name: Provision database for ${{ inputs.environment }}
+        id: provision_database
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
-          database-name: ${{ vars.APP_NAME }}-api
+          database-name: ${{ vars.APP_NAME }}-api-${{ inputs.environment }}-db
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
-  
+
+      - name: "Add managed identity to database for ${{ inputs.environment }} with output from provision database"
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/managed-id@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
+          sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
+          sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
+          sql-connection-string: ${{ steps.provision_database.outputs.sqlconnectionstring }}
 
   # deploy-db:
   #   name: "Deploy database til ${{ inputs.environment }}"
