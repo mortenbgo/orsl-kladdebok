@@ -125,7 +125,7 @@ jobs:
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
-          sql-connection-string: ${{ steps.provision_database.outputs.sqlconnectionstring }}
+          sql-connection-string: ${{ steps.provision_database.outputs.connection-string }}
 
   # deploy-db:
   #   name: "Deploy database til ${{ inputs.environment }}"
