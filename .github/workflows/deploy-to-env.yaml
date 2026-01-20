@@ -113,7 +113,7 @@ jobs:
           environment: ${{ inputs.environment }}
           database-name: ${{ vars.APP_NAME }}-api
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
-          sql-server-name: 'felles-db-server-${{inputs.environment}}.-managedid'
+          sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
   
 
   # deploy-db:
