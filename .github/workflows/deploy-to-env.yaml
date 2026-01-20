@@ -115,12 +115,21 @@ jobs:
           vars-json: ${{ toJSON(vars) }}
           secrets-json: ${{ toJSON(secrets) }}
 
-      - name: Provision database for ${{ inputs.environment }}
-        id: provision_database
+      - name: "Provision database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api"
+        id: provision_api_database
         uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
         with:
           environment: ${{ inputs.environment }}
           database-name: ${{ vars.APP_NAME }}-api-${{ inputs.environment }}-db
+          sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
+          sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
+
+      - name: "Provision database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-function"
+        id: provision_function_database
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          database-name: ${{ vars.APP_NAME }}-function-${{ inputs.environment }}-db
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
 
@@ -132,7 +141,7 @@ jobs:
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
-          sql-connection-string: ${{ steps.provision_database.outputs.connection-string }}
+          sql-connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
 
 
       - name: "Add managed identity to database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api with output from provision database"
@@ -143,7 +152,7 @@ jobs:
           app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
-          sql-connection-string: ${{ steps.provision_database.outputs.connection-string }}
+          sql-connection-string: ${{ steps.provision_api_database.outputs.connection-string }}
 
 
           
