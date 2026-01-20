@@ -6,31 +6,31 @@ on:
   workflow_dispatch:
     
 jobs:  
-  # build-function:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  build-function:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         
-  #     - name: Build function app
-  #       uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-function-app@feature/function-as-compaction
-  #       with:
-  #         project-directory: './function'
-  #         artifact-name: 'function-app'
-  #         dotnet-version: '10.x'
+      - name: Build function app
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-function-app@feature/function-as-compaction
+        with:
+          project-directory: './function'
+          artifact-name: 'function-app'
+          dotnet-version: '10.x'
 
-  # build-api:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
         
-  #     - name: Build API app
-  #       uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-app@feature/function-as-compaction
-  #       with:
-  #         project-directory: './API'
-  #         artifact-name: 'api'
-  #         dotnet-version: '10.x'
+      - name: Build API app
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-app@feature/function-as-compaction
+        with:
+          project-directory: './API'
+          artifact-name: 'api'
+          dotnet-version: '10.x'
   # build-api:
   #   name: "Bygger applikasjonen"
   #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-app.yaml@v2.0.9
@@ -40,18 +40,18 @@ jobs:
   #     dotnet-version: '10.x'
   #   secrets: inherit
 
-  build-function:
-    name: "Bygger applikasjonen"
-    uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
-    with:
-      project-directory: './function'
-      artifact-name: 'function-app'
-      dotnet-version: '10.x'
-    secrets: inherit
+  # build-function:
+  #   name: "Bygger applikasjonen"
+  #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/workflows/build-dotnet-function.yaml@feature/function-as-compaction
+  #   with:
+  #     project-directory: './function'
+  #     artifact-name: 'function-app'
+  #     dotnet-version: '10.x'
+  #   secrets: inherit
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  
-    # needs: [build-function, build-api]
+    needs: [build-function, build-api]
     
     strategy:
       max-parallel: 1
