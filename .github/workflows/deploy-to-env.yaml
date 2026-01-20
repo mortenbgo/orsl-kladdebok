@@ -97,7 +97,7 @@ jobs:
       #     secrets-json: ${{ toJSON(secrets) }}
       
       - name: "Deploy Function App to ${{ inputs.environment }}"  
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/function-app@feature/function-as-compaction
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-function-app@feature/function-as-compaction
         with:
           function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
           environment: ${{ inputs.environment }}

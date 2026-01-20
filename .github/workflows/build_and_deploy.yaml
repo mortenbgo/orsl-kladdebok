@@ -13,7 +13,7 @@ jobs:
   #       uses: actions/checkout@v4
         
   #     - name: Build function app
-  #       uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/function-app@feature/function-as-compaction
+  #       uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-function-app@feature/function-as-compaction
   #       with:
   #         project-directory: './function'
   #         artifact-name: 'function-app'
