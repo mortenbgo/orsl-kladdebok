@@ -136,7 +136,7 @@ jobs:
           environment: ${{ inputs.environment }}
           artifact-name: 'function-app'
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          # cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
+          cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           vars-json: ${{ toJSON(vars) }}
           secrets-json: ${{ toJSON(secrets) }}
           # connection-string-navn: 'KladdebokFunctionDbConnection'
