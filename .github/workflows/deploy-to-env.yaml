@@ -70,15 +70,6 @@ jobs:
       #     app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
       #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
-      - name: Provision Function App for ${{ inputs.environment }}
-        id: provision_function_app
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
-        with:
-          environment: ${{ inputs.environment }}
-          function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
-          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          dotnet-version: 'v9.0'
-          storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
 
       # - name: Deploy Angular App to ${{ inputs.environment }}
       #   id: deploy_angular
@@ -107,6 +98,21 @@ jobs:
           sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
           sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
 
+      - name: Provision Function App for ${{ inputs.environment }}
+        id: provision_function_app
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/function@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          dotnet-version: 'v9.0'
+          storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
+          cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
+          connectionStringName: 'KladdebokFunctionDbConnection'
+          connectionString: ${{ steps.provision_function_database.outputs.connection-string }}
+
+
+
       # - name: "Deploy API App to ${{ inputs.environment }}"  
       #   id: deploy_api
       #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-app@feature/function-as-compaction
@@ -130,11 +136,11 @@ jobs:
           environment: ${{ inputs.environment }}
           artifact-name: 'function-app'
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
+          # cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           vars-json: ${{ toJSON(vars) }}
           secrets-json: ${{ toJSON(secrets) }}
-          connection-string-navn: 'KladdebokFunctionDbConnection'
-          connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
+          # connection-string-navn: 'KladdebokFunctionDbConnection'
+          # connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
 
       - name: "Add managed identity to database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-function with output from provision database"
         id: add_managed_id_function
