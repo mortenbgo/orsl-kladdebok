@@ -38,56 +38,56 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Build angular app
-      #   id: build_angular
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@feature/function-as-compaction
-      #   with:
-      #     project-directory: 'web'
-      #     artifact-name: "web-${{ inputs.environment }}"
+      - name: Build angular app
+        id: build_angular
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/angular-app@feature/function-as-compaction
+        with:
+          project-directory: 'web'
+          artifact-name: "web-${{ inputs.environment }}"
 
-      # - name: Provision angular app service for ${{ inputs.environment }}
-      #   id: provision_angular_app_service
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     artifact-name: 'web'
-      #     app-name: ${{ vars.APP_NAME }}
-      #     #set external-access to true if environment is QA or PROD
-      #     external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
-      #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-      #     app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
-      #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
+      - name: Provision angular app service for ${{ inputs.environment }}
+        id: provision_angular_app_service
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          artifact-name: 'web'
+          app-name: ${{ vars.APP_NAME }}
+          #set external-access to true if environment is QA or PROD
+          external-access: ${{ contains(fromJSON('["QA", "PROD"]'), inputs.environment) }}
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
+          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
-      # - name: Provision API app service for ${{ inputs.environment }}
-      #   id: provision_api_app_service
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     artifact-name: 'api'
-      #     app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
-      #     external-access: false
-      #     resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
-      #     app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
-      #     app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
-
-
-      # - name: Deploy Angular App to ${{ inputs.environment }}
-      #   id: deploy_angular
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
-      #   with:          
-      #     artifact-name: "web-${{ inputs.environment }}"   
-      #     app-name: ${{ vars.APP_NAME }}
-      #     vars-json: ${{ toJSON(vars) }}
+      - name: Provision API app service for ${{ inputs.environment }}
+        id: provision_api_app_service
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/app-service@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          artifact-name: 'api'
+          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
+          external-access: false
+          resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'    
+          app-service-plan-name: ${{ env.APP_SERVICE_PLAN_NAME }}
+          app-service-plan-resource-group-name: ${{env.APP_SERVICE_PLAN_RESOURCE_GROUP_NAME}}
 
 
-      # - name: "Provision database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api"
-      #   id: provision_api_database
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     database-name: ${{ vars.APP_NAME }}-api-${{ inputs.environment }}-db
-      #     sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
-      #     sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
+      - name: Deploy Angular App to ${{ inputs.environment }}
+        id: deploy_angular
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/angular-app@feature/function-as-compaction
+        with:          
+          artifact-name: "web-${{ inputs.environment }}"   
+          app-name: ${{ vars.APP_NAME }}
+          vars-json: ${{ toJSON(vars) }}
+
+
+      - name: "Provision database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api"
+        id: provision_api_database
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/database@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          database-name: ${{ vars.APP_NAME }}-api-${{ inputs.environment }}-db
+          sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
+          sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
 
       - name: "Provision database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-function"
         id: provision_function_database
@@ -113,20 +113,20 @@ jobs:
 
 
 
-      # - name: "Deploy API App to ${{ inputs.environment }}"  
-      #   id: deploy_api
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-app@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     artifact-name: 'api'
-      #     app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
-      #     connection-string-navn: 'KladdebokDbConnection'
-      #     # Using a placeholder for connection string, replace with actual secret or output from DB deployment
-      #     connection-string: ${{ steps.provision_api_database.outputs.connection-string }}
-      #     cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
-      #     azure-appsettings: true
-      #     vars-json: ${{ toJSON(vars) }}
-      #     secrets-json: ${{ toJSON(secrets) }}
+      - name: "Deploy API App to ${{ inputs.environment }}"  
+        id: deploy_api
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/deploy/dotnet-app@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          artifact-name: 'api'
+          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
+          connection-string-navn: 'KladdebokDbConnection'
+          # Using a placeholder for connection string, replace with actual secret or output from DB deployment
+          connection-string: ${{ steps.provision_api_database.outputs.connection-string }}
+          cors: 'https://orsl-kladdebok.azurewebsites.net, https://orsl-kladdebok.no'
+          azure-appsettings: true
+          vars-json: ${{ toJSON(vars) }}
+          secrets-json: ${{ toJSON(secrets) }}
       
       - name: "Deploy Function App to ${{ inputs.environment }}"  
         id: deploy_function
@@ -139,8 +139,8 @@ jobs:
           cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           vars-json: ${{ toJSON(vars) }}
           secrets-json: ${{ toJSON(secrets) }}
-          # connection-string-navn: 'KladdebokFunctionDbConnection'
-          # connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
+          connection-string-navn: 'KladdebokFunctionDbConnection'
+          connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
 
       - name: "Add managed identity to database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-function with output from provision database"
         id: add_managed_id_function
@@ -153,15 +153,15 @@ jobs:
           sql-connection-string: ${{ steps.provision_function_database.outputs.connection-string }}
 
 
-      # - name: "Add managed identity to database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api with output from provision database"
-      #   id: add_managed_id_api
-      #   uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/managed-id@feature/function-as-compaction
-      #   with:
-      #     environment: ${{ inputs.environment }}
-      #     app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
-      #     sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
-      #     sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
-      #     sql-connection-string: ${{ steps.provision_api_database.outputs.connection-string }}
+      - name: "Add managed identity to database for ${{ vars.APP_NAME }}-${{ inputs.environment }}-api with output from provision database"
+        id: add_managed_id_api
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/provision/managed-id@feature/function-as-compaction
+        with:
+          environment: ${{ inputs.environment }}
+          app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-api
+          sql-server-resource-group: 'HVI-UTVIKLING-${{ inputs.environment }}-FELLES-rg'          
+          sql-server-name: 'felles-db-server-${{inputs.environment}}-managedid'
+          sql-connection-string: ${{ steps.provision_api_database.outputs.connection-string }}
 
 
           
