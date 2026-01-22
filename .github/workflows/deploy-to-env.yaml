@@ -110,7 +110,7 @@ jobs:
           cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           connectionStringName: 'KladdebokFunctionDbConnection'
           connectionString: ${{ steps.provision_function_database.outputs.connection-string }}
-          codestack: dotnet
+          codeStack: 'dotnet'
 
 
 
