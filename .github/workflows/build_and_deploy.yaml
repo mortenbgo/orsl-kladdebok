@@ -30,7 +30,7 @@ jobs:
         with:
           project-directory: './API'
           artifact-name: 'api'
-          dotnet-version: '10.x'
+          dotnet-version: '8.x'
 
   deploy:
     name: "Provision og deploy til ${{ matrix.environment }}"  

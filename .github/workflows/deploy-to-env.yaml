@@ -105,7 +105,7 @@ jobs:
           environment: ${{ inputs.environment }}
           function-app-name: ${{ vars.APP_NAME }}-${{ inputs.environment }}-function
           resource-group: 'HVI-UTV-${{ inputs.environment }}-orsl-kladdebok-rg'
-          dotnet-version: 'v9.0'
+          dotnet-version: 'v8.0'
           storage-account-name: 'orslkladdebok${{ inputs.environment }}sa'
           cors: 'https://www.bt.no, https://portal.azure.com, https://nrk.no'
           connectionStringName: 'KladdebokFunctionDbConnection'
