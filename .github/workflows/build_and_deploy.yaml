@@ -1,8 +1,8 @@
 on:
-  # push:
-  #   branches:
+  push:
+    branches:
   #     - main
-  #     - disco-comp
+      - disco-comp
   workflow_dispatch:
     
 jobs:  
@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Build function app
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-function-app@feature/function-as-compaction
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-function-app@main
         with:
           project-directory: './function'
           artifact-name: 'function-app'
@@ -26,27 +26,27 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Build API app
-        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-app@feature/function-as-compaction
+        uses: HelseVestIKT/HVI-Felles-WorkFlows/.github/actions/build/dotnet-app@main
         with:
           project-directory: './API'
           artifact-name: 'api'
           dotnet-version: '9.x'
 
-  deploy:
-    name: "Provision og deploy til ${{ matrix.environment }}"  
-    needs: [build-function, build-api]
+  # deploy:
+  #   name: "Provision og deploy til ${{ matrix.environment }}"  
+  #   needs: [build-function, build-api]
     
-    strategy:
-      max-parallel: 1
-      fail-fast: true
-      matrix:
-        # environment: [DEV, QA, PROD] 
-        environment: [DEV] 
-    uses: ./.github/workflows/deploy-to-env.yaml 
-    with:
-      environment: ${{ matrix.environment }}
-    secrets: inherit
-    permissions:
-      contents: read
-      id-token: write
-      issues: write 
+  #   strategy:
+  #     max-parallel: 1
+  #     fail-fast: true
+  #     matrix:
+  #       # environment: [DEV, QA, PROD] 
+  #       environment: [DEV] 
+  #   uses: ./.github/workflows/deploy-to-env.yaml 
+  #   with:
+  #     environment: ${{ matrix.environment }}
+  #   secrets: inherit
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #     issues: write 
